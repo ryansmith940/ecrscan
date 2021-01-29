@@ -127,11 +127,11 @@ def get_results(ecr_client, repository, tag, registry_id):
                         nextToken=next_token
                     )
 
+            findings = response.get('imageScanFindings', {}).get('findings', [])
+            if findings:
+                logger.info('findings: %s', json.dumps(findings, indent=2, default=date_converter))
+                
             next_token = response.get('nextToken', None)
-
-        findings = response.get('imageScanFindings', {}).get('findings', [])
-        if findings:
-            logger.info('findings: %s', json.dumps(findings, indent=2, default=date_converter))
             
         summary = response.get('imageScanFindings', {}).get('findingSeverityCounts', {})
         logger.debug(json.dumps(summary, indent=2, default=date_converter))
